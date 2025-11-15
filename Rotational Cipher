@@ -1,0 +1,22 @@
+public static class RotationalCipher
+{
+    public static string Rotate(string text, int key)
+    {
+        key = key % 26;
+        return new string(text
+            .Select(c => RotateChar(c, key))
+            .ToArray());
+    }
+    private static char RotateChar(char c, int key)
+    {
+        if (char.IsLower(c))
+        {
+            return (char)((c - 'a' + key) % 26 + 'a');
+        }
+        if (char.IsUpper(c))
+        {
+            return (char)((c - 'A' + key) % 26 + 'A');
+        }
+        return c;
+    }
+}
