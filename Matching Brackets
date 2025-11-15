@@ -1,0 +1,34 @@
+public static class MatchingBrackets
+{
+    public static bool IsPaired(string input)
+    {
+        Stack<char> stack = new Stack<char>();
+        foreach (char c in input)
+        {
+            if (IsOpening(c))
+            {
+                stack.Push(c);
+            }
+            else if (IsClosing(c))
+            {
+                if (stack.Count == 0) return false;
+                char open = stack.Pop();
+                if (!Matches(open, c))
+                    return false;
+            }
+        }
+        return stack.Count == 0;
+    }
+    private static bool IsOpening(char c) =>
+        c == '(' || c == '[' || c == '{';
+    private static bool IsClosing(char c) =>
+        c == ')' || c == ']' || c == '}';
+    private static bool Matches(char open, char close) =>
+        (open, close) switch
+        {
+            ('(', ')') => true,
+            ('[', ']') => true,
+            ('{', '}') => true,
+            _ => false
+        };
+}
