@@ -1,0 +1,40 @@
+public static class Dominoes
+{
+    public static bool CanChain(IEnumerable<(int, int)> dominoes)
+    {
+        var edges = dominoes.ToList();
+        if (edges.Count == 0)
+            return true; // Vacuously chainable
+        Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
+        Dictionary<int, int> degree = new Dictionary<int, int>();
+        void AddEdge(int a, int b)
+        {
+            if (!graph.ContainsKey(a)) graph[a] = new List<int>();
+            if (!graph.ContainsKey(b)) graph[b] = new List<int>();
+            graph[a].Add(b);
+            graph[b].Add(a);
+            degree[a] = degree.GetValueOrDefault(a) + 1;
+            degree[b] = degree.GetValueOrDefault(b) + 1;
+        }
+        foreach (var (a, b) in edges)
+            AddEdge(a, b);
+        if (degree.Values.Any(d => d % 2 != 0))
+            return false;
+        int start = degree.First(v => v.Value > 0).Key;
+        HashSet<int> visited = new HashSet<int>();
+        void DFS(int v)
+        {
+            visited.Add(v);
+            foreach (var nxt in graph[v])
+                if (!visited.Contains(nxt))
+                    DFS(nxt);
+        }
+        DFS(start);
+        foreach (var v in degree.Keys)
+        {
+            if (degree[v] > 0 && !visited.Contains(v))
+                return false;
+        }
+        return true;
+    }
+}
