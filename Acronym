@@ -1,0 +1,38 @@
+public static class Acronym
+{
+    public static string Abbreviate(string phrase)
+    {
+        if (string.IsNullOrWhiteSpace(phrase))
+            return string.Empty;
+        
+        phrase = phrase.Replace('-', ' ');
+        var result = new List<char>();
+        bool startOfWord = true;
+        foreach (char c in phrase)
+        {
+            if (char.IsLetter(c))
+            {
+                if (startOfWord)
+                    result.Add(char.ToUpperInvariant(c));
+                startOfWord = false;
+            }
+            else
+            {
+                
+                if (char.IsWhiteSpace(c))
+                {
+                    startOfWord = true; 
+                }
+                else
+                {
+                    
+                    if (c == '\'')
+                        startOfWord = false;
+                    else
+                        startOfWord = true;
+                }
+            }
+        }
+        return new string(result.ToArray());
+    }
+}
