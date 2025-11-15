@@ -1,0 +1,30 @@
+public static class Bob
+{
+    public static string Response(string statement)
+    {
+        if (IsSilence(statement))
+            return "Fine. Be that way!";
+        bool isQuestion = IsQuestion(statement);
+        bool isYelling = IsYelling(statement);
+        if (isYelling && isQuestion)
+            return "Calm down, I know what I'm doing!";
+        if (isYelling)
+            return "Whoa, chill out!";
+        if (isQuestion)
+            return "Sure.";
+        return "Whatever.";
+    }
+    private static bool IsSilence(string input)
+    {
+        return string.IsNullOrWhiteSpace(input);
+    }
+    private static bool IsQuestion(string input)
+    {
+        return input.TrimEnd().EndsWith("?");
+    }
+    private static bool IsYelling(string input)
+    {
+        bool hasLetters = input.Any(char.IsLetter);
+        return hasLetters && input.ToUpper() == input;
+    }
+}
