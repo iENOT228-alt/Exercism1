@@ -1,0 +1,70 @@
+using System;
+using System.Linq;
+public enum Schedule
+{
+    Teenth,
+    First,
+    Second,
+    Third,
+    Fourth,
+    Last
+}
+public class Meetup
+{
+    private readonly int _month;
+    private readonly int _year;
+    public Meetup(int month, int year)
+    {
+        _month = month;
+        _year = year;
+    }
+    public DateTime Day(DayOfWeek dayOfWeek, Schedule schedule)
+    {
+        int daysInMonth = DateTime.DaysInMonth(_year, _month);
+        DateTime resultDate = DateTime.MinValue; 
+        if (schedule == Schedule.Teenth)
+        {
+            for (int day = 13; day <= 19; day++)
+            {
+                DateTime teenthDate = new DateTime(_year, _month, day);
+                if (teenthDate.DayOfWeek == dayOfWeek)
+                {
+                    return teenthDate;
+                }
+            }
+        }
+        int count = 0;
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            DateTime currentDate = new DateTime(_year, _month, day);
+            if (currentDate.DayOfWeek == dayOfWeek)
+            {
+                count++;
+                switch (schedule)
+                {
+                    case Schedule.First:
+                        if (count == 1) return currentDate;
+                        break;
+                    case Schedule.Second:
+                        if (count == 2) return currentDate;
+                        break;
+                    case Schedule.Third:
+                        if (count == 3) return currentDate;
+                        break;
+                    case Schedule.Fourth:
+                        if (count == 4) return currentDate;
+                        break;
+                    case Schedule.Last:
+                        resultDate = currentDate; 
+                        break;
+                }
+            }
+        }
+        
+        if (schedule == Schedule.Last && resultDate != DateTime.MinValue)
+        {
+            return resultDate;
+        }
+        throw new InvalidOperationException("Could not find a valid meetup date.");
+    }
+}
